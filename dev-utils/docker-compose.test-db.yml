@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  mossport-docu-back-test-db:
+    image: postgres:15-alpine
+    ports:
+      - "5441:5432"
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+
+  test-s3:
+    image: minio/minio
+    restart: always
+    ports:
+      - "9003:9000"
+    environment:
+      MINIO_ROOT_USER: 12345678
+      MINIO_ROOT_PASSWORD: 12345678
+    entrypoint: sh -c "mc mb data/auctionator-evm && minio server /data"

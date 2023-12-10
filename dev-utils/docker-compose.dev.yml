@@ -1,0 +1,42 @@
+services:
+  auctionator-evm-back-dev:
+    container_name: auctionator-evm-back-dev
+    build:
+      context: ..
+      target: development
+    ports:
+      - "5000:5000"
+    volumes:
+      - ..:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - DB_HOST=auctionator-evm-db-dev
+      - DB_PORT=5432
+    depends_on: [ auctionator-evm-db-dev ]
+    command: [ "npm", "run", "start:dev" ]
+
+  auctionator-evm-db-dev:
+    container_name: auctionator-evm-db-dev
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=auctionator-evm
+    volumes:
+      - ./dev-db-data:/var/lib/postgresql/data
+      - ./backups:/opt/backups
+
+  s3:
+    image: minio/minio
+    restart: always
+    ports:
+      - "9001:9000"
+    volumes:
+      - ./dev-s3-data:/data
+    environment:
+      MINIO_ROOT_USER: 12345678
+      MINIO_ROOT_PASSWORD: 12345678
+    entrypoint: sh -c "mc mb data/auctionator-evm && minio server /data"

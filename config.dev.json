@@ -1,0 +1,11 @@
+{
+  "port": 5000,
+  "jwtToken": {
+    "userTokenExpiresIn": "1y"
+  },
+  "s3": {
+    "bucketName": "auctionator-evm",
+    "endPoint": "localhost",
+    "port": 9001
+  }
+}
