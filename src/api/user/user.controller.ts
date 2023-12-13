@@ -1,13 +1,12 @@
-import { Query, Resolver } from '@nestjs/graphql';
-import { Logger } from '@nestjs/common';
-import { UserEntity } from './entities/user-.entity';
+import { Controller, Get, Logger } from '@nestjs/common';
+import { UserRepository } from './user.repository';
+import { UserEntity } from './entities/user.entity';
 import { CurrentAuth } from '../auth/decorators/current-auth.decorator';
 import { ICurrentAuth } from '../auth/interfaces/current-auth.interface';
-import { UserRepository } from './user.repository';
 
-@Resolver()
-export class UserResolver {
-  private readonly logger = new Logger(UserResolver.name);
+@Controller('user')
+export class UserController {
+  private readonly logger = new Logger(UserController.name);
 
   constructor(private readonly userRepository: UserRepository) {}
 
@@ -16,9 +15,7 @@ export class UserResolver {
    * @param auth - Current authorization
    * @returns Current DocuBackUserEntity
    */
-  @Query(() => UserEntity, {
-    description: 'Returns current authorized user',
-  })
+  @Get('user-current')
   async userCurrent(
     @CurrentAuth() auth: ICurrentAuth,
   ): Promise<UserEntity> {

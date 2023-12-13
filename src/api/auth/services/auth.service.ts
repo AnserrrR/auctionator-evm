@@ -5,7 +5,7 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { IJwtPayloadCreate } from '../interfaces/jwt-payload.interface';
-import { UserEntity } from '../../user/entities/user-.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { ConfigService } from '../../../config/config.service';
 
 @Injectable()

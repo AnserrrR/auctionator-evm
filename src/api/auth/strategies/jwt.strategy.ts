@@ -7,7 +7,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { IJwtPayload } from '../interfaces/jwt-payload.interface';
 import { ConfigService } from '../../../config/config.service';
-import { UserEntity } from '../../user/entities/user-.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { ICurrentAuth } from '../interfaces/current-auth.interface';
 
 /**

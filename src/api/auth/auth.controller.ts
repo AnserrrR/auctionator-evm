@@ -1,41 +1,36 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import {
-  InternalServerErrorException, Logger,
+  Body, Controller, InternalServerErrorException, Logger, Post,
 } from '@nestjs/common';
-import { Public } from './decorators/public.decorator';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './services/auth.service';
+import { Public } from './decorators/public.decorator';
 import { CurrentAuth } from './decorators/current-auth.decorator';
 import { ICurrentAuth } from './interfaces/current-auth.interface';
-import { ConfigService } from '../../config/config.service';
+import { LoginDto } from './dtos/login.dto';
 
 /**
- * Resolver for users login and logout.
+ * Controller for authentication
  */
-@Resolver()
-export class AuthResolver {
-  private readonly logger = new Logger(AuthResolver.name);
-
+@Controller('auth')
+export class AuthController {
   constructor(
-    private readonly configService: ConfigService,
     private readonly authService: AuthService,
   ) {}
+
+  private readonly logger = new Logger(AuthController.name);
 
   /**
    * Auth by remote service and upsert user in database.
    * If remote service not available -> auth by database.
-   * @param login - User login.
-   * @param password - User password.
    * @returns JWT.
+   * @param input
    */
-  @Mutation(() => String, {
-    description: 'Returns JWT. Tries auth by remote service or database.',
-  })
+  @Post('login')
   @Public()
   async loginByPassword(
-    @Args('login') login: string,
-    @Args('password') password: string,
+    @Body() input: LoginDto,
   ): Promise<string> {
-    const userEntity = await this.authService.checkUserThoughDatabase({ login, password }).catch((err: Error) => {
+    const userEntity = await this.authService.checkUserThoughDatabase({ ...input }).catch((err: Error) => {
       throw err;
     });
     if (!userEntity.jwtKey) {
@@ -52,9 +47,8 @@ export class AuthResolver {
    * Logout and invalidate all previously created JWTs.
    * @param auth - Current auth.
    */
-  @Mutation(() => Boolean, {
-    description: 'Logout and invalidate all previously created JWTs',
-  })
+  @ApiBearerAuth('JWT')
+  @Post('logout')
   async logout(@CurrentAuth() auth: ICurrentAuth): Promise<boolean> {
     if (!auth.user.id) {
       throw new InternalServerErrorException('User ID not found');

@@ -162,7 +162,6 @@ export class ConfigService {
     DB_PASSWORD: joi.string().required(),
     DB_DATABASE: joi.string().required(),
     JWT_TOKEN_SECRET: joi.string().required(),
-    IAS_API_KEY: joi.string().required(),
     S3_ACCESS_KEY: joi.string().required(),
     S3_SECRET_KEY: joi.string().required(),
   }).required();

@@ -3,7 +3,7 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GraphQLUUID } from 'graphql-scalars';
-import { UserEntity } from '../../api/user/entities/user-.entity';
+import { UserEntity } from '../../api/user/entities/user.entity';
 
 /**
  * Entity used for logging user mutation calls by special interceptor.

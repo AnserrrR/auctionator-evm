@@ -1,25 +1,23 @@
-import {
-  BaseEntity, Column, Entity, PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Field, ObjectType } from '@nestjs/graphql';
-import { GraphQLEmailAddress, GraphQLUUID } from 'graphql-scalars';
+import { Column, Entity } from 'typeorm';
+import { ApiHideProperty } from '@nestjs/swagger';
 import { UserRoleEnum } from '../enums/user-role.enum';
+import { AppBaseEntity } from '../../../common/entities/app-base.entity';
 
 @Entity()
-@ObjectType()
-export class UserEntity extends BaseEntity {
-  @Field(() => GraphQLUUID)
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Field(() => GraphQLEmailAddress)
+export class UserEntity extends AppBaseEntity {
+  /**
+   * User email.
+   */
   @Column('text', { unique: true })
   email: string;
 
-  @Field(() => UserRoleEnum)
+  /**
+   * User role.
+   */
   @Column('enum', { enum: UserRoleEnum })
   role: UserRoleEnum;
 
+  @ApiHideProperty()
   @Column('text')
   password: string;
 
@@ -29,7 +27,6 @@ export class UserEntity extends BaseEntity {
   @Column('text', { nullable: true })
   jwtKey?: string;
 
-  @Field(() => [String])
   @Column('simple-array')
   departments: string[];
 }
