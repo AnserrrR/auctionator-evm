@@ -1,8 +1,9 @@
 import {
-  Column, Entity, JoinTable, ManyToMany,
+  Column, Entity, JoinTable, ManyToMany, ManyToOne,
 } from 'typeorm';
 import { ImageStoreEntity } from '../../files/entities/image-store.entity';
 import { AppBaseEntity } from '../../../common/entities/app-base.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 
 /**
  * Lot entity
@@ -18,13 +19,19 @@ export class LotEntity extends AppBaseEntity {
   /**
    * Description of the lot
    */
-  @Column('text')
-  description: string;
+  @Column('text', { nullable: true })
+  description?: string;
+
+  /**
+   * Owner of the lot
+   */
+  @ManyToOne(() => UserEntity)
+  owner: UserEntity;
 
   /**
    * Image of the lot
    */
   @ManyToMany(() => ImageStoreEntity)
   @JoinTable()
-  images: ImageStoreEntity;
+  images: ImageStoreEntity[];
 }

@@ -3,10 +3,10 @@ import { AuctionEntity } from './entities/auction.entity';
 
 export class AuctionObserver implements IObserver<AuctionEntity> {
   constructor(
-    private readonly updateAuction: (auction: AuctionEntity) => void,
+    private readonly updateFunction: (auction: AuctionEntity) => void,
   ) {}
 
   update(auction: AuctionEntity): void {
-    this.updateAuction(auction);
+    this.updateFunction(auction);
   }
 }

@@ -2,6 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { UserRoleEnum } from '../enums/user-role.enum';
 import { AppBaseEntity } from '../../../common/entities/app-base.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class UserEntity extends AppBaseEntity {
@@ -13,12 +14,14 @@ export class UserEntity extends AppBaseEntity {
 
   /**
    * User role.
+   * @enum UserRoleEnum
    */
   @Column('enum', { enum: UserRoleEnum })
   role: UserRoleEnum;
 
   @ApiHideProperty()
   @Column('text')
+  @Exclude()
   password: string;
 
   /**
@@ -27,6 +30,9 @@ export class UserEntity extends AppBaseEntity {
   @Column('text', { nullable: true })
   jwtKey?: string;
 
-  @Column('simple-array')
-  departments: string[];
+  /**
+   * User balance.
+   */
+  @Column('float', { default: 0 })
+  balance: number;
 }

@@ -12,7 +12,7 @@ import { BidController } from './bid.controller';
     BidService,
   ],
   imports: [
-    TypeOrmModule.forFeature([AuctionEntity, BidEntity]),
+    TypeOrmModule.forFeature([BidEntity]),
     AuctionModule,
   ],
 })

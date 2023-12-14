@@ -33,6 +33,7 @@ import { FileStoreEntity } from './entities/file-store.entity';
   exports: [
     FilesService,
     ImageService,
+    ImageStoreService,
     S3Service,
   ],
 })

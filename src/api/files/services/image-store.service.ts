@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 import assert from '../../../common/assert';
 import { ImageStoreEntity } from '../entities/image-store.entity';
 import { ImageStoreUpdateInput } from '../inputs/image-store-update.input';
@@ -21,5 +21,12 @@ export class ImageStoreService {
     assert(imageStore, new NotFoundException('Image not found'));
     imageStore.isVisible = input.isVisible;
     return imageStore.save();
+  }
+
+  /**
+   * Get image store by ids
+   */
+  async getByIds(ids: string[]): Promise<ImageStoreEntity[]> {
+    return ImageStoreEntity.findBy({ id: In(ids) });
   }
 }
