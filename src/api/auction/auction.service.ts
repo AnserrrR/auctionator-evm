@@ -26,11 +26,22 @@ export class AuctionService {
     return auction;
   }
 
-  subscribe(id: string, updateFunction: (auction: AuctionEntity) => void): void {
+  subscribe(id: string, updateFunction: (auction: AuctionEntity) => void): AuctionObserver {
+    const observer = new AuctionObserver(updateFunction);
     this.getById(id).then((auction) => {
-      const observer = new AuctionObserver(updateFunction);
       auction.attach(observer);
     });
+    return observer;
+  }
+
+  unsubscribe(id: string, observer: AuctionObserver): void {
+    const auction = this.observableAuctions.find(
+      (item) => item.id === id,
+    );
+    if (!auction) {
+      return;
+    }
+    auction.detach(observer);
   }
 
   async extendDurationAndPrice(id: string, price: number): Promise<AuctionEntity> {

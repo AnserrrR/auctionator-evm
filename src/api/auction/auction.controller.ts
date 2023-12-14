@@ -25,8 +25,11 @@ export class AuctionController {
     res.setHeader('Cache-Control', 'no-cache');
     res.flushHeaders();
 
-    this.auctionService.subscribe(auctionId, (auction) => {
+    const observer = this.auctionService.subscribe(auctionId, (auction) => {
       res.write(`data: ${JSON.stringify(auction)}\n\n`);
+    });
+    res.on('close', () => {
+      this.auctionService.unsubscribe(auctionId, observer);
     });
   }
 

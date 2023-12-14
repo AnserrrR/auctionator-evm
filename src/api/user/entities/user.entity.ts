@@ -27,6 +27,8 @@ export class UserEntity extends AppBaseEntity {
   /**
    * Key for JWT. It is possible to log out of the account from all devices by changing this line.
    */
+  @ApiHideProperty()
+  @Exclude()
   @Column('text', { nullable: true })
   jwtKey?: string;
 
