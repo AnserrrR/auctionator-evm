@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  mossport-docu-back-test-db:
+  auctionator-evm-test-db:
     image: postgres:15-alpine
     ports:
       - "5441:5432"

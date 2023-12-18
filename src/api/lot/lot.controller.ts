@@ -1,5 +1,5 @@
 import {
-  Body, Controller, Get, Param, Patch, Post,
+  Body, Controller, Delete, Get, Param, Patch, Post,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { LotService } from './lot.service';
@@ -44,6 +44,19 @@ export class LotController {
   }
 
   /**
+   * Delete a lot
+   * @param id
+   * @param user
+   */
+  @Delete(':id')
+  async lotDelete(
+    @Param('id') id: string,
+    @CurrentAuth('user') user: UserEntity,
+  ): Promise<boolean> {
+    return this.lotService.delete(id, user);
+  }
+
+  /**
    * Get a lot by id
    * @param id
    */
@@ -56,12 +69,14 @@ export class LotController {
 
   /**
    * Get filtered lots
+   * @param user
    * @param filter
    */
   @Get()
   async lotGetFiltered(
+    @CurrentAuth('user') user: UserEntity,
     @Body() filter: LotFilterDto,
   ): Promise<LotEntity[]> {
-    return this.lotService.getFiltered(filter);
+    return this.lotService.getFiltered(filter, user);
   }
 }

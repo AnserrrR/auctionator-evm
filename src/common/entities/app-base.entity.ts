@@ -11,7 +11,7 @@ import {
  * Base entity for all entities in the project.
  */
 @Entity()
-export class AppBaseEntity extends BaseEntity {
+export abstract class AppBaseEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

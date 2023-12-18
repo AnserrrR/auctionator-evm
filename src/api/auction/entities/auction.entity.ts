@@ -116,8 +116,35 @@ export class AuctionEntity extends AppBaseEntity implements ISubject {
     }
   }
 
+  extendDuration(): void {
+    assert(
+      this.status === AuctionStatusEnum.IN_PROGRESS,
+      new BadRequestException('Auction is not in progress'),
+    );
+    if (this.remainingTime > this.extension) {
+      return;
+    }
+    this.duration += this.extension;
+  }
+
+  extendPrice(amount: number): void {
+    assert(
+      this.status === AuctionStatusEnum.IN_PROGRESS,
+      new BadRequestException('Auction is not in progress'),
+    );
+    assert(
+      amount > this.currentPrice,
+      new BadRequestException('New price must be greater than current price'),
+    );
+
+    this.currentPrice = amount;
+  }
+
   async decideWinner(): Promise<void> {
-    assert(this.status === AuctionStatusEnum.FINISHED, new BadRequestException('Auction is not finished yet'));
+    assert(
+      this.status === AuctionStatusEnum.FINISHED,
+      new BadRequestException('Auction is not finished yet'),
+    );
 
     if (this.winner) {
       return;
@@ -142,30 +169,6 @@ export class AuctionEntity extends AppBaseEntity implements ISubject {
     await this.save();
     await winnerBid.save();
     await this.lot.save();
-  }
-
-  extendDuration(): void {
-    assert(
-      this.status === AuctionStatusEnum.IN_PROGRESS,
-      new BadRequestException('Auction is not in progress'),
-    );
-    if (this.remainingTime > this.extension) {
-      return;
-    }
-    this.duration += this.extension;
-  }
-
-  extendPrice(amount: number): void {
-    assert(
-      this.status === AuctionStatusEnum.IN_PROGRESS,
-      new BadRequestException('Auction is not in progress'),
-    );
-    assert(
-      amount > this.currentPrice,
-      new BadRequestException('New price must be greater than current price'),
-    );
-
-    this.currentPrice = amount;
   }
 
   attach(observer: IObserver<AuctionEntity>): void {

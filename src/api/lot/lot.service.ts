@@ -32,11 +32,13 @@ export class LotService {
     return lot;
   }
 
-  async getFiltered(filter: LotFilterDto): Promise<LotEntity[]> {
+  async getFiltered(filter: LotFilterDto, user: UserEntity): Promise<LotEntity[]> {
     return LotEntity.find({
       where: {
         owner: {
-          id: filter.ownerId,
+          id: user.role === UserRoleEnum.Admin
+            ? filter.ownerId
+            : user.id,
         },
       },
       ...filter,

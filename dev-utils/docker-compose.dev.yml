@@ -33,7 +33,7 @@ services:
     image: minio/minio
     restart: always
     ports:
-      - "9001:9000"
+      - "9002:9000"
     volumes:
       - ./dev-s3-data:/data
     environment:
