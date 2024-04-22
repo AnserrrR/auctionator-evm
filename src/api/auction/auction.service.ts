@@ -3,6 +3,7 @@ import { merge } from 'lodash';
 import { AuctionEntity } from './entities/auction.entity';
 import assert from '../../common/assert';
 import { AuctionObserver } from './auction.observer';
+import { AuctionEntityBuilder } from './auction-entity-builder';
 
 @Injectable()
 export class AuctionService {
@@ -61,6 +62,25 @@ export class AuctionService {
     assert(auction, new NotFoundException(`Auction with id ${id} not found`));
 
     await auction.decideWinner();
+    return auction;
+  }
+
+  async createAuction(input: AuctionEntity): Promise<AuctionEntity> {
+    const builder = new AuctionEntityBuilder(
+      input.name,
+      input.startDate,
+      input.duration,
+      input.startPrice,
+      input.lot,
+      input.owner,
+    );
+    if (input.description) {
+      builder.withDescription(input.description);
+    }
+    if (input.extension) {
+      builder.withExtension(input.extension);
+    }
+    const auction = builder.build();
     return auction;
   }
 }

@@ -6,6 +6,6 @@
   "s3": {
     "bucketName": "auctionator-evm",
     "endPoint": "localhost",
-    "port": 9001
+    "port": 9002
   }
 }

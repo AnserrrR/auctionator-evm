@@ -111,8 +111,10 @@ export class AuctionEntity extends AppBaseEntity implements ISubject {
 
     if (this.remainingTime <= 0) {
       this.status = AuctionStatusEnum.FINISHED;
-    } else if (this.remainingTime <= this.extension) {
+    } else if (this.remainingTime <= this.duration) {
       this.status = AuctionStatusEnum.IN_PROGRESS;
+    } else {
+      this.status = AuctionStatusEnum.NOT_STARTED;
     }
   }
 

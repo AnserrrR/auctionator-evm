@@ -72,7 +72,7 @@ export class LotController {
    * @param user
    * @param filter
    */
-  @Get()
+  @Post('filtered')
   async lotGetFiltered(
     @CurrentAuth('user') user: UserEntity,
     @Body() filter: LotFilterDto,
